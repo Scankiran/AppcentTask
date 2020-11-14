@@ -12,6 +12,37 @@ import UIKit
 class CoreDataController {
     static let run = CoreDataController()
     
+    
+    func checkCoreData(_ id:Int) -> Bool {
+        guard let appDelegate =
+          UIApplication.shared.delegate as? AppDelegate else {
+            return false
+        }
+        
+        let managedContext =
+          appDelegate.persistentContainer.viewContext
+        
+        //2
+        let fetchRequest =
+          NSFetchRequest<NSManagedObject>(entityName: "FavoritedGames")
+        
+        //3
+        do {
+            let data = try managedContext.fetch(fetchRequest)
+            for index in data {
+                if index.value(forKey: "id") as! Int == id {
+                    return true
+                }
+            }
+        } catch let error as NSError {
+            print(error.localizedDescription)
+            return false
+        }
+        return false
+    }
+    
+    
+    
     func getGames(handler: @escaping (_ result:[NSManagedObject]?,_ error:Error?)-> Void) {
         guard let appDelegate =
           UIApplication.shared.delegate as? AppDelegate else {

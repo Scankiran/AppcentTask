@@ -10,8 +10,9 @@ import Alamofire; import Kingfisher
 class GameDetailView: UIViewController {
     lazy var gameID:Int? = nil
     lazy var game:GameDetail? = nil
+    var isFavorited:Bool = false
     @IBOutlet weak var gameImage: UIImageView!
-    @IBOutlet weak var favoriteButton: UIButton!
+    var favoriteButton:UIButton = UIButton()
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var relasedDateLabel: UILabel!
     @IBOutlet weak var metaCriticLabel: UILabel!
@@ -23,22 +24,42 @@ class GameDetailView: UIViewController {
         scrollView.delegate = self
         descriptionTextArea.delegate = self
         descriptionTextArea.isScrollEnabled = false
+        isFavorited = CoreDataController.run.checkCoreData(gameID!)
+        createButton()
         getData()
+        
         // Do any additional setup after loading the view.
     }
+    @IBAction func backButton(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
     
-    @IBAction func addFavorite(_ sender: Any) {
+    @objc func addFavorite() {
         if let game = game {
-            CoreDataController.run.saveGame(game.id, game.name, game.released, game.background_image, game.rating, game.rating_top) { (result, err) in
-                if let err = err {
-                    print(err.localizedDescription)
-                    //show fail
-                    return
+            if !isFavorited {
+                CoreDataController.run.saveGame(game.id, game.name, game.released, game.background_image, game.rating, game.rating_top) { (result, err) in
+                    if let err = err {
+                        print(err.localizedDescription)
+                        //show fail
+                        return
+                    }
+                    
+                    //showSuccess
+                    print("Kayıt oldu")
+                    self.favoriteButton.setImage(UIImage.init(named: "heart_filled"), for: .normal)
+                    self.isFavorited = true
                 }
-                
-                //showSuccess
-                print("Kayıt oldu")
+            } else {
+                if CoreDataController.run.deleteGame(gameID!) {
+                    print("deleted")
+                    //showSucces
+                    self.favoriteButton.setImage(UIImage.init(named: "heart"), for: .normal)
+                    self.isFavorited = false
+                } else {
+                    //show fail.
+                }
             }
+            
         }
        
     }
@@ -81,5 +102,18 @@ extension GameDetailView: UIScrollViewDelegate, UITextViewDelegate {
             self.descriptionTextArea.isScrollEnabled = false
             self.scrollView.isScrollEnabled = true
         }
+    }
+    
+    func createButton() {
+        favoriteButton = UIButton.init(frame: CGRect.init(x: self.gameImage.bounds.maxX - 75, y: self.gameImage.bounds.maxY - 75, width: 50, height: 50))
+        if isFavorited {
+            favoriteButton.setImage(UIImage.init(named: "heart_filled"), for: .normal)
+        } else {
+            favoriteButton.setImage(UIImage.init(named: "heart"), for: .normal)
+        }
+        favoriteButton.addTarget(self, action: #selector(addFavorite), for: .touchUpInside)
+        favoriteButton.isUserInteractionEnabled = true
+        gameImage.isUserInteractionEnabled = true
+        gameImage.addSubview(favoriteButton)
     }
 }
