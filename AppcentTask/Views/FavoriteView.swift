@@ -24,15 +24,15 @@ extension FavoriteView: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.shared.gameCollectionCellProperty, for: indexPath) as! GameCollectionCell
+        //let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.shared.gameCollectionCellProperty, for: indexPath) as! GameCollectionCell
         
-        cell.configure()
+        //cell.configure()
         
-        return cell
+        return UICollectionViewCell()
     }
     
     func giveDelegateToTableView() {
-        collectionView.register(UINib.init(nibName: Constants.shared.gameCollectionCellProperty, bundle: nil), forCellWithReuseIdentifier: Constants.shared.gameCollectionCellProperty)
+        collectionView.register(UINib.init(nibName: Constants.shared.gameCellProperty, bundle: nil), forCellWithReuseIdentifier: Constants.shared.gameCellProperty)
         collectionView.dataSource = self
         collectionView.delegate = self
     }

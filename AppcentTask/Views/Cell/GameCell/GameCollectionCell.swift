@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Kingfisher
 class GameCollectionCell: UICollectionViewCell {
     lazy var id:Int = 0
     
@@ -19,7 +19,10 @@ class GameCollectionCell: UICollectionViewCell {
         // Initialization code
     }
     
-    func configure() {
+    func configure(_ data:Game) {
+        gameName.text = data.name
+        ratingLabel.text = "\(data.rating)/\(data.rating_top)"
+        gameImage.kf.setImage(with: URL(string: data.background_image))
         
     }
     

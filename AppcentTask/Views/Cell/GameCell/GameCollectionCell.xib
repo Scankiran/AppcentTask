@@ -16,10 +16,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="360" height="100"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ko9-zR-OmC">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square.and.arrow.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ko9-zR-OmC">
                         <rect key="frame" x="16" y="10" width="100" height="80"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="ko9-zR-OmC" secondAttribute="height" multiplier="5:4" id="iNX-AL-P50"/>
+                            <constraint firstAttribute="width" constant="100" id="Htm-3w-ybK"/>
+                            <constraint firstAttribute="height" constant="80" id="a61-te-IX9"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="suZ-XJ-oWO">
@@ -48,7 +49,6 @@
                 <constraint firstItem="1Op-l5-reP" firstAttribute="top" secondItem="suZ-XJ-oWO" secondAttribute="bottom" constant="16" id="C5H-BX-0Ll"/>
                 <constraint firstAttribute="bottom" secondItem="ko9-zR-OmC" secondAttribute="bottom" constant="10" id="JD0-29-4eg"/>
                 <constraint firstItem="ko9-zR-OmC" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="16" id="QXb-6G-GiD"/>
-                <constraint firstItem="ko9-zR-OmC" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="Uev-Wj-KK3"/>
                 <constraint firstItem="1Op-l5-reP" firstAttribute="leading" secondItem="ko9-zR-OmC" secondAttribute="trailing" constant="16" id="aZN-4a-Mb9"/>
                 <constraint firstAttribute="trailing" secondItem="suZ-XJ-oWO" secondAttribute="trailing" constant="16" id="dpf-7U-00P"/>
                 <constraint firstItem="suZ-XJ-oWO" firstAttribute="top" secondItem="ko9-zR-OmC" secondAttribute="top" id="ydq-qb-Adi"/>
@@ -61,4 +61,7 @@
             <point key="canvasLocation" x="140.57971014492756" y="148.66071428571428"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
+    </resources>
 </document>
