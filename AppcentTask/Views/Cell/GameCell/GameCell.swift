@@ -7,6 +7,8 @@
 
 import UIKit
 import Kingfisher
+import CoreData
+
 class GameCell: UITableViewCell {
     lazy var id:Int = 0
     @IBOutlet weak var gameImage: UIImageView!
@@ -30,6 +32,19 @@ class GameCell: UITableViewCell {
         gameImage.kf.setImage(with: URL(string: game.background_image))
         nameLabel.text = game.name
         ratingLabel.text = "\(game.rating)/\(game.rating_top)"
+    }
+    
+    func configure(_ game:NSManagedObject) {
+        let id = game.value(forKey: "id") as! Int
+        let name = game.value(forKey: "name") as! String
+        let url = game.value(forKey: "background_image") as! String
+        let rating = game.value(forKey: "rating") as! Double
+        let rating_top = game.value(forKey: "rating_top") as! Double
+        
+        self.id = id
+        gameImage.kf.setImage(with: URL(string: url))
+        nameLabel.text = name
+        ratingLabel.text = "\(rating)/\(rating_top)"
     }
     
     override func prepareForReuse() {
