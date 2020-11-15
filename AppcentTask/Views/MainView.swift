@@ -15,6 +15,7 @@ class MainView: UIViewController {
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var pageControllerCons: NSLayoutConstraint!
     
     lazy var isSearch:Bool = false
     lazy var searchResult:[Game] = []
@@ -55,8 +56,13 @@ extension MainView: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        isSearch = !isSearch
+        isSearch = false
         searchBar.text = ""
+        searchResult.removeAll()
+        if self.view.subviews.last?.tag == 9 {
+            self.view.subviews.last?.removeFromSuperview()
+        }
+        pageControllerCons.constant = 72
         self.tableView.reloadData()
     }
   
@@ -72,13 +78,33 @@ extension MainView: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count > 2 {
+            //self.view.bringSubviewToFront(self.searchBar)
+            searchResult.removeAll()
+            self.view.bringSubviewToFront(searchBar)
+            pageControllerCons.constant = -200
+            isSearch = true
             for game in data!.results {
                 if game.name.contains(searchText) {
                     searchResult.append(game)
                 }
             }
-            tableView.reloadData()
+            if searchResult.isEmpty {
+                showNotFound()
+            } else {
+                tableView.reloadData()
+            }
+            
         }
+    }
+    
+    private func showNotFound() {
+        let view = UIView(frame: CGRect.init(x: 0, y: 80, width: self.view.frame.width, height: self.view.frame.height-80))
+        let label = UILabel.init(frame: CGRect.init(x: view.frame.midX - 75, y: view.frame.midY - 15, width: 150, height: 30))
+        label.text = "Oyun bulunamadı"
+        view.addSubview(label)
+        view.backgroundColor = UIColor.white
+        view.tag = 9
+        self.view.addSubview(view)
     }
     
     

@@ -54,7 +54,7 @@
                                             <constraint firstItem="ACW-XC-S3K" firstAttribute="top" secondItem="F3h-zk-s2K" secondAttribute="top" constant="8" id="Koe-wv-46e"/>
                                             <constraint firstItem="AZt-xi-Y55" firstAttribute="top" secondItem="qRt-iM-hNh" secondAttribute="bottom" constant="16" id="MUq-yD-5FK"/>
                                             <constraint firstItem="qRt-iM-hNh" firstAttribute="centerX" secondItem="F3h-zk-s2K" secondAttribute="centerX" id="NQ0-Ea-kZU"/>
-                                            <constraint firstItem="T3Q-BV-AT7" firstAttribute="top" secondItem="ACW-XC-S3K" secondAttribute="bottom" constant="8" id="PUf-jt-eAb"/>
+                                            <constraint firstItem="T3Q-BV-AT7" firstAttribute="top" secondItem="F3h-zk-s2K" secondAttribute="top" constant="72" id="PUf-jt-eAb"/>
                                             <constraint firstAttribute="trailing" secondItem="AZt-xi-Y55" secondAttribute="trailing" constant="8" id="Pza-ag-4ps"/>
                                             <constraint firstItem="ACW-XC-S3K" firstAttribute="leading" secondItem="F3h-zk-s2K" secondAttribute="leading" id="bfq-He-sdT"/>
                                             <constraint firstItem="AZt-xi-Y55" firstAttribute="leading" secondItem="F3h-zk-s2K" secondAttribute="leading" constant="8" id="ch9-1d-0cD"/>
@@ -85,6 +85,7 @@
                     <tabBarItem key="tabBarItem" title="Item" image="house" catalog="system" selectedImage="house.fill" id="ykh-Oc-5pm"/>
                     <connections>
                         <outlet property="pageControl" destination="qRt-iM-hNh" id="XKi-8m-mHn"/>
+                        <outlet property="pageControllerCons" destination="PUf-jt-eAb" id="NYS-bf-z7F"/>
                         <outlet property="scrollView" destination="UsM-Ly-TkY" id="n2A-Ez-47h"/>
                         <outlet property="searchBar" destination="ACW-XC-S3K" id="cGH-td-jCc"/>
                         <outlet property="tableView" destination="AZt-xi-Y55" id="Dg2-XF-NgG"/>
