@@ -22,11 +22,11 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F3h-zk-s2K">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="861"/>
                                         <subviews>
-                                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ACW-XC-S3K">
+                                            <searchBar contentMode="redraw" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ACW-XC-S3K">
                                                 <rect key="frame" x="0.0" y="8" width="375" height="56"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </searchBar>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3Q-BV-AT7">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3Q-BV-AT7" customClass="CarouselScrollView" customModule="CarouselSwift">
                                                 <rect key="frame" x="8" y="72" width="359" height="198"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
@@ -275,7 +275,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="bNE-MR-8Pc"/>
+        <segue reference="gT8-Hc-NCB"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="heart" catalog="system" width="128" height="109"/>

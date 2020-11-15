@@ -11,6 +11,7 @@ import CoreData
 
 class GameCell: UITableViewCell {
     lazy var id:Int = 0
+    let cache = ImageCache.default
     @IBOutlet weak var gameImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
@@ -25,11 +26,11 @@ class GameCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+
     
     func configure(_ game:Game) {
         id = game.id
-        gameImage.kf.setImage(with: URL(string: game.background_image))
+        gameImage.kf.setImage(with: URL(string: game.background_image),options: [.targetCache(customCache())])
         nameLabel.text = game.name
         ratingLabel.text = "\(game.rating)/\(game.rating_top)"
     }
@@ -42,7 +43,7 @@ class GameCell: UITableViewCell {
         let rating_top = game.value(forKey: "rating_top") as! Double
         
         self.id = id
-        gameImage.kf.setImage(with: URL(string: url))
+        gameImage.kf.setImage(with: URL(string: url),options: [.targetCache(customCache())])
         nameLabel.text = name
         ratingLabel.text = "\(rating)/\(rating_top)"
     }
@@ -53,4 +54,9 @@ class GameCell: UITableViewCell {
         ratingLabel.text = ""
     }
     
+    private func customCache() -> ImageCache {
+        let cache = ImageCache.default
+        cache.memoryStorage.config.totalCostLimit = 1
+        return cache
+    }
 }
