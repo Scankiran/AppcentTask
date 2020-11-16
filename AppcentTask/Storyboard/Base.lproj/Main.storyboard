@@ -22,10 +22,6 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F3h-zk-s2K">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="861"/>
                                         <subviews>
-                                            <searchBar contentMode="redraw" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ACW-XC-S3K">
-                                                <rect key="frame" x="0.0" y="8" width="375" height="56"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </searchBar>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3Q-BV-AT7" customClass="iCarousel">
                                                 <rect key="frame" x="8" y="72" width="359" height="198"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -43,6 +39,10 @@
                                                 <rect key="frame" x="8" y="322" width="359" height="523"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </tableView>
+                                            <searchBar contentMode="redraw" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ACW-XC-S3K">
+                                                <rect key="frame" x="0.0" y="8" width="375" height="56"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </searchBar>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>

@@ -67,6 +67,7 @@ extension MainView: iCarouselDelegate, iCarouselDataSource {
         let imageView = UIImageView.init()
         imageView.frame = CGRect.init(x: 0, y: 10, width: carouselView.frame.width - 20, height: carouselView.frame.height)
         imageView.kf.setImage(with: URL(string: self.data!.results[index].background_image))
+        
         return imageView
     }
     
@@ -96,8 +97,6 @@ extension MainView: iCarouselDelegate, iCarouselDataSource {
         } else {
             carouselView.scrollToItem(at: 0, duration: 1)
         }
-        
-        
     }
     
 }
@@ -136,6 +135,7 @@ extension MainView: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count > 2 {
+            
             searchResult.removeAll()
             isSearch = true
             for game in data!.results {
@@ -147,39 +147,37 @@ extension MainView: UISearchBarDelegate {
                 showNotFound()
                 return
             }
+            pageControllerCons.constant = -180
             self.tableView.reloadData()
             return
         }
         
-        isSearch = false
-        self.tableView.reloadData()
+        
     }
     
     private func showNotFound() {
         let view = UIView(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
         view.translatesAutoresizingMaskIntoConstraints = false
-        let label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 150, height: 30))
-
-        label.text = "Oyun bulunamadı"
-        view.addSubview(label)
+        
+        let label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Üzgünüz, aradığınız oyun bulunamadı!"
+        
         view.tag = 9
         view.backgroundColor = UIColor.white
+        
+        view.addSubview(label)
         self.view.addSubview(view)
         
+        view.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 0).isActive = true
+        view.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
+        view.heightAnchor.constraint(equalToConstant: self.view.frame.height - 80).isActive = true
         
-        
-        let widthConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: self.view.frame.width)
-        let heightConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: self.view.frame.height - 80)
-        
-        let horizontalConstraint = NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 50)
-        
-        let verticalConstraint = NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0)
-        
-        let labelWidth = NSLayoutConstraint(item: label, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
-        
-        let labelHeight = NSLayoutConstraint(item: label, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
-        
-        NSLayoutConstraint.activate([view.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 0), widthConstraint, heightConstraint, horizontalConstraint, verticalConstraint, labelWidth, labelHeight])
+        label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        label.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        label.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
+        label.textAlignment = .center
   
     }
     
