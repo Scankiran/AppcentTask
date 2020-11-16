@@ -26,7 +26,7 @@
                                                 <rect key="frame" x="0.0" y="8" width="375" height="56"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </searchBar>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3Q-BV-AT7" customClass="CarouselScrollView" customModule="CarouselSwift">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3Q-BV-AT7" customClass="iCarousel">
                                                 <rect key="frame" x="8" y="72" width="359" height="198"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
@@ -84,6 +84,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" image="house" catalog="system" selectedImage="house.fill" id="ykh-Oc-5pm"/>
                     <connections>
+                        <outlet property="carouselView" destination="T3Q-BV-AT7" id="hW7-lU-1L4"/>
                         <outlet property="pageControl" destination="qRt-iM-hNh" id="XKi-8m-mHn"/>
                         <outlet property="pageControllerCons" destination="PUf-jt-eAb" id="NYS-bf-z7F"/>
                         <outlet property="scrollView" destination="UsM-Ly-TkY" id="n2A-Ez-47h"/>

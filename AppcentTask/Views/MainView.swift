@@ -7,25 +7,38 @@
 
 import UIKit
 import Alamofire
-
+import iCarousel
 class MainView: UIViewController {
-    var data:Games?
+    var data:Games? {
+        didSet {
+            carouselView.delegate = self
+            carouselView.dataSource = self
+            _ = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(autoScrool), userInfo: nil, repeats: true)
+        }
+    }
     lazy var selectedID:Int = 0
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var pageControllerCons: NSLayoutConstraint!
+    @IBOutlet weak var carouselView: iCarousel!
     
     lazy var isSearch:Bool = false
     lazy var searchResult:[Game] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        
         searchBar.delegate = self
         getData()
         giveDelegateToTableView()
+        
+        
     }
+    
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! GameDetailView
@@ -42,6 +55,51 @@ class MainView: UIViewController {
           var recognizer = UITapGestureRecognizer(target:self, action: #selector(dismissKeyboard))
           return recognizer
         }()
+}
+
+
+extension MainView: iCarouselDelegate, iCarouselDataSource {
+    func numberOfItems(in carousel: iCarousel) -> Int {
+        return 3
+    }
+    
+    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: UIView?) -> UIView {
+        let imageView = UIImageView.init()
+        imageView.frame = CGRect.init(x: 0, y: 10, width: carouselView.frame.width - 20, height: carouselView.frame.height)
+        imageView.kf.setImage(with: URL(string: self.data!.results[index].background_image))
+        return imageView
+    }
+    
+    func carousel(_ carousel: iCarousel, valueFor option: iCarouselOption, withDefault value: CGFloat) -> CGFloat {
+        if option == .spacing {
+            return value * 1.2
+        }
+        if option == .wrap {
+            return 1
+        }
+        return value
+    }
+    
+    func carousel(_ carousel: iCarousel, didSelectItemAt index: Int) {
+        self.selectedID = self.data!.results[index].id
+        performSegue(withIdentifier: Constants.shared.toGameDetail, sender: self)
+    }
+    
+    func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
+        pageControl.currentPage = carousel.currentItemIndex
+    }
+    
+    
+    @objc func autoScrool() {
+        if carouselView.currentItemIndex != carouselView.numberOfItems {
+            carouselView.scrollToItem(at: carouselView.currentItemIndex + 1, duration: 1)
+        } else {
+            carouselView.scrollToItem(at: 0, duration: 1)
+        }
+        
+        
+    }
+    
 }
 
 // MARK: - Search Bar Delegate
@@ -78,10 +136,7 @@ extension MainView: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count > 2 {
-            //self.view.bringSubviewToFront(self.searchBar)
             searchResult.removeAll()
-            self.view.bringSubviewToFront(searchBar)
-            pageControllerCons.constant = -200
             isSearch = true
             for game in data!.results {
                 if game.name.contains(searchText) {
@@ -90,21 +145,42 @@ extension MainView: UISearchBarDelegate {
             }
             if searchResult.isEmpty {
                 showNotFound()
-            } else {
-                tableView.reloadData()
+                return
             }
-            
+            self.tableView.reloadData()
+            return
         }
+        
+        isSearch = false
+        self.tableView.reloadData()
     }
     
     private func showNotFound() {
-        let view = UIView(frame: CGRect.init(x: 0, y: 80, width: self.view.frame.width, height: self.view.frame.height-80))
-        let label = UILabel.init(frame: CGRect.init(x: view.frame.midX - 75, y: view.frame.midY - 15, width: 150, height: 30))
+        let view = UIView(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        let label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 150, height: 30))
+
         label.text = "Oyun bulunamadı"
         view.addSubview(label)
-        view.backgroundColor = UIColor.white
         view.tag = 9
+        view.backgroundColor = UIColor.white
         self.view.addSubview(view)
+        
+        
+        
+        let widthConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: self.view.frame.width)
+        let heightConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: self.view.frame.height - 80)
+        
+        let horizontalConstraint = NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 50)
+        
+        let verticalConstraint = NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0)
+        
+        let labelWidth = NSLayoutConstraint(item: label, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+        
+        let labelHeight = NSLayoutConstraint(item: label, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+        
+        NSLayoutConstraint.activate([view.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 0), widthConstraint, heightConstraint, horizontalConstraint, verticalConstraint, labelWidth, labelHeight])
+  
     }
     
     

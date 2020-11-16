@@ -8,5 +8,5 @@ target 'AppcentTask' do
   # Pods for AppcentTask
 	pod 'Alamofire'
 	pod 'Kingfisher'
-
+  pod 'iCarousel'
 end

@@ -1,22 +1,26 @@
 PODS:
   - Alamofire (5.2.2)
+  - iCarousel (1.8.3)
   - Kingfisher (5.15.5):
     - Kingfisher/Core (= 5.15.5)
   - Kingfisher/Core (5.15.5)
 
 DEPENDENCIES:
   - Alamofire
+  - iCarousel
   - Kingfisher
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - iCarousel
     - Kingfisher
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
   Kingfisher: e3ec347a5ab8817b7585ef46923a2d2b9a7d8fbe
 
-PODFILE CHECKSUM: aee619d708bc815e35ceaf84ae2278ac2c9abe48
+PODFILE CHECKSUM: ab90a2fe934dd71605cee926d3799acf4b8c58db
 
 COCOAPODS: 1.10.0.beta.2
