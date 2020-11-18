@@ -24,10 +24,10 @@ class GameDetailView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        createView()
+        
         isFavorited = CoreDataController.run.checkCoreData(gameID!)
         getData()
-        
+        createView()
     }
     @IBAction func backButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)

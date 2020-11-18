@@ -90,24 +90,11 @@
                     <view key="view" contentMode="scaleToFill" id="Fel-7R-Elf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TZT-dV-GtS">
-                                <rect key="frame" x="8" y="8" width="359" height="610"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="xQh-aQ-Sqf"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="TZT-dV-GtS" firstAttribute="leading" secondItem="xQh-aQ-Sqf" secondAttribute="leading" constant="8" id="Ab2-UB-foZ"/>
-                            <constraint firstItem="TZT-dV-GtS" firstAttribute="top" secondItem="xQh-aQ-Sqf" secondAttribute="top" constant="8" id="FBY-Vy-qJh"/>
-                            <constraint firstItem="xQh-aQ-Sqf" firstAttribute="trailing" secondItem="TZT-dV-GtS" secondAttribute="trailing" constant="8" id="G3Y-Jd-ZHl"/>
-                            <constraint firstItem="xQh-aQ-Sqf" firstAttribute="bottom" secondItem="TZT-dV-GtS" secondAttribute="bottom" id="YXu-yp-Zu6"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" image="heart" catalog="system" selectedImage="heart.fill" id="6Ik-LZ-wK0"/>
                     <connections>
-                        <outlet property="tableView" destination="TZT-dV-GtS" id="X0n-sO-rDP"/>
                         <segue destination="WGr-rL-e4I" kind="show" identifier="toGameDetail" id="bNE-MR-8Pc"/>
                     </connections>
                 </viewController>
@@ -136,7 +123,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="gT8-Hc-NCB"/>
+        <segue reference="bNE-MR-8Pc"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="heart" catalog="system" width="128" height="109"/>

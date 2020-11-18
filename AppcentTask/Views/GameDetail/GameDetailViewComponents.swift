@@ -15,6 +15,7 @@ extension GameDetailView {
         self.view.addSubview(backButton1)
         backButton1.setTitle("Back", for: .normal)
         backButton1.setTitleColor(UIColor.black, for: .normal)
+        (isFavorited) ? self.favoriteButton.setImage(UIImage.init(named: "heart_filled"), for: .normal):self.favoriteButton.setImage(UIImage.init(named: "heart"), for: .normal)
         backButton1.addTarget(self, action: #selector(backButton(_:)), for: .allTouchEvents)
         backButton1.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32).isActive = true
         backButton1.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true

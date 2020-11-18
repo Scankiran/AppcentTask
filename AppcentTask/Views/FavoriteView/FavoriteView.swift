@@ -8,13 +8,20 @@
 import UIKit
 import CoreData
 class FavoriteView: UIViewController {
-    var favoritedGames:[NSManagedObject] = []
+    var favoritedGames:[NSManagedObject] = [] {
+        didSet {
+            giveDelegateToView()
+        }
+    }
+    lazy var collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     lazy var selectedID:Int = 0
-    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        giveDelegateToTableView()
+        getData()
+        createCollectionView()
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,47 +41,56 @@ class FavoriteView: UIViewController {
                 return
             }
             self.favoritedGames = result!
-            self.tableView.reloadData()
+            self.collectionView.reloadData()
         }
     }
 
 }
 
-
-extension FavoriteView: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favoritedGames.count
+extension FavoriteView: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.favoritedGames.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.shared.gameCellProperty) as! GameCell
-        cell.configure(favoritedGames[indexPath.row])
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.shared.gameCellProperty, for: indexPath) as! CollectionViewCell
+        cell.configure(self.favoritedGames[indexPath.row])
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! GameCell
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         self.selectedID = cell.id
         performSegue(withIdentifier: Constants.shared.toGameDetail, sender: self)
     }
+
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let game = tableView.cellForRow(at: indexPath) as! GameCell
-            _ = CoreDataController.run.deleteGame(game.id)
-            self.getData()
-            
-        }
+    func giveDelegateToView() {
+        collectionView.register(UINib.init(nibName: "CollectionViewCell", bundle: nil), forCellWithReuseIdentifier: Constants.shared.gameCellProperty)
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
     
-    func giveDelegateToTableView() {
-        tableView.register(UINib.init(nibName: Constants.shared.gameCellProperty, bundle: nil), forCellReuseIdentifier: Constants.shared.gameCellProperty)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.isScrollEnabled = false
-        tableView.rowHeight = 100
+}
+
+
+extension FavoriteView {
+    func createCollectionView() {
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isUserInteractionEnabled = true
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: 320, height: 100)
+        collectionView.collectionViewLayout = layout
+        collectionView.backgroundColor = UIColor.clear
+        self.view.addSubview(collectionView)
+        collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 8).isActive = true
+        collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant:  -8).isActive = true
+        collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 16).isActive = true
     }
-    
 }
 
 
