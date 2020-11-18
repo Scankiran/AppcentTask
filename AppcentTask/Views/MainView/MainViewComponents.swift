@@ -13,7 +13,7 @@ extension MainView {
     func showNotFound() {
         pageControl.removeFromSuperview()
         carouselView.removeFromSuperview()
-        tableView.removeFromSuperview()
+        collectionView.removeFromSuperview()
         
         let view = UIView(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -61,13 +61,30 @@ extension MainView {
 
     }
     
-    func createTableView() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(tableView)
-        tableView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
-        tableView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant:  -8).isActive = true
-        tableView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 8).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 16).isActive = true
+//    func createTableView() {
+//        tableView.translatesAutoresizingMaskIntoConstraints = false
+//        tableView.isUserInteractionEnabled = true
+//        contentView.addSubview(tableView)
+//        tableView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
+//        tableView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant:  -8).isActive = true
+//        tableView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 8).isActive = true
+//        tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 16).isActive = true
+//    }
+    
+    func createCollectionView() {
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isUserInteractionEnabled = true
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: 320, height: 100)
+        collectionView.collectionViewLayout = layout
+        collectionView.backgroundColor = UIColor.clear
+        contentView.addSubview(collectionView)
+        collectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
+        collectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant:  -8).isActive = true
+        collectionView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 8).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 16).isActive = true
     }
 }
 
@@ -75,20 +92,19 @@ extension MainView {
 extension MainView: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView == self.scrollView,!scrollView.contentOffset.equalTo(CGPoint.init(x: 0, y: 0)) {
-            self.tableView.isScrollEnabled = true
+            self.collectionView.isScrollEnabled = true
             self.scrollView.isScrollEnabled = false
-        } else if scrollView == tableView, scrollView.contentOffset.equalTo(CGPoint.init(x: 0, y: 0)) {
-            self.tableView.isScrollEnabled = false
+        } else if scrollView == collectionView, scrollView.contentOffset.equalTo(CGPoint.init(x: 0, y: 0)) {
+            self.collectionView.isScrollEnabled = false
             self.scrollView.isScrollEnabled = true
         }
     }
     
     func giveDelegateToTableView() {
-        tableView.register(UINib.init(nibName: Constants.shared.gameCellProperty, bundle: nil), forCellReuseIdentifier: Constants.shared.gameCellProperty)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.isScrollEnabled = false
-        tableView.rowHeight = 100
+        collectionView.register(UINib.init(nibName: "CollectionViewCell", bundle: nil), forCellWithReuseIdentifier: Constants.shared.gameCellProperty)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.isScrollEnabled = false
         
         scrollView.delegate = self
     }

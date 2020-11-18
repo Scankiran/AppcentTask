@@ -13,7 +13,7 @@ class MainView: UIViewController {
  
     @IBOutlet weak var searchBar: UISearchBar!
     var pageControl: UIPageControl = UIPageControl()
-    var tableView: UITableView = UITableView()
+    var collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
     var carouselView: iCarousel = iCarousel()
@@ -35,9 +35,9 @@ class MainView: UIViewController {
         // Do any additional setup after loading the view.
         
         createCarousel()
-        createTableView()
+        createCollectionView()
         searchBar.delegate = self
-        getData()
+        getData(appendData: false)
         giveDelegateToTableView()
         
         
@@ -115,13 +115,15 @@ extension MainView: UISearchBarDelegate {
         isSearch = false
         searchBar.text = ""
         searchResult.removeAll()
+        searchBar.endEditing(true)
         if self.view.subviews.last?.tag == 9 {
             self.view.subviews.last?.removeFromSuperview()
         }
         createCarousel()
-        tableView.removeFromSuperview()
-        createTableView()
-        self.tableView.reloadData()
+        collectionView.removeFromSuperview()
+        createCollectionView()
+        //createTableView()
+        self.collectionView.reloadData()
     }
   
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -150,17 +152,17 @@ extension MainView: UISearchBarDelegate {
             }
             carouselView.removeFromSuperview()
             pageControl.removeFromSuperview()
-            self.tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16).isActive = true
-            self.tableView.reloadData()
+            self.collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16).isActive = true
+            self.collectionView.reloadData()
             return
         }
         
         if searchText.isEmpty {
             isSearch = false
-            tableView.removeFromSuperview()
+            collectionView.removeFromSuperview()
             createCarousel()
-            createTableView()
-            tableView.reloadData()
+            createCollectionView()
+            collectionView.reloadData()
         }
         
         
@@ -176,12 +178,21 @@ extension MainView: UISearchBarDelegate {
 
 //MARK: Get Data
 extension MainView {
-    func getData()  {
+    func getData(appendData:Bool)  {
         AF.request(Constants.shared.requestURL, method: .get, parameters: nil, headers: HTTPHeaders.init(Constants.shared.requestHeaders), interceptor: nil, requestModifier: nil).response { (response) in
             if let data = response.data {
                 do {
-                    self.data = try JSONDecoder.init().decode(Games.self, from: data)
-                    self.tableView.reloadData()
+                    if appendData {
+                        self.data = try JSONDecoder.init().decode(Games.self, from: data)
+                        self.collectionView.reloadData()
+                    } else {
+                        let newData = try JSONDecoder.init().decode(Games.self, from: data)
+                        self.data!.results.append(contentsOf: newData.results)
+                        self.data!.previous = newData.previous
+                        self.data!.next = newData.next
+                        self.collectionView.reloadData()
+                    }
+                    
                 }catch {
                     print(error)
                     print(error.localizedDescription)
@@ -192,48 +203,27 @@ extension MainView {
     }
 }
 
-
-
-//MARK: Table View
-extension MainView: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//MARK: Colleciton View
+extension MainView: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return (isSearch) ? searchResult.count : ((data?.results.count ?? 0) - 3)
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.shared.gameCellProperty) as! GameCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.shared.gameCellProperty, for: indexPath) as! CollectionViewCell
         (isSearch) ? cell.configure(searchResult[indexPath.row]):cell.configure(data!.results[indexPath.row + 3])
-        
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! GameCell
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! CollectionViewCell
         self.selectedID = cell.id
         performSegue(withIdentifier: Constants.shared.toGameDetail, sender: self)
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row + 4 == data!.results.count, !isSearch {
-            AF.request(self.data!.next!, method: .get, parameters: nil, headers: HTTPHeaders.init(Constants.shared.requestHeaders), interceptor: nil, requestModifier: nil).response { (response) in
-                if let data = response.data {
-                    do {
-                        let newData = try JSONDecoder.init().decode(Games.self, from: data)
-                        self.data!.results.append(contentsOf: newData.results)
-                        self.data!.previous = newData.previous
-                        self.data!.next = newData.next
-                        self.tableView.reloadData()
-                    }catch {
-                        print(error)
-                        print(error.localizedDescription)
-                    }
-
-                }
-            }
+            getData(appendData: true)
         }
     }
 }
-
-
-
-
