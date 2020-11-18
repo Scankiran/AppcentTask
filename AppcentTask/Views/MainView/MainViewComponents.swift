@@ -61,15 +61,7 @@ extension MainView {
 
     }
     
-//    func createTableView() {
-//        tableView.translatesAutoresizingMaskIntoConstraints = false
-//        tableView.isUserInteractionEnabled = true
-//        contentView.addSubview(tableView)
-//        tableView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8).isActive = true
-//        tableView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant:  -8).isActive = true
-//        tableView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 8).isActive = true
-//        tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 16).isActive = true
-//    }
+
     
     func createCollectionView() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false

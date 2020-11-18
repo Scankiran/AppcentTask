@@ -8,27 +8,26 @@
 import UIKit
 import Alamofire; import Kingfisher
 class GameDetailView: UIViewController {
+    lazy var backButton1 = UIButton()
+    lazy var gameImage1 = UIImageView()
+    lazy var nameLabel1 = UILabel()
+    lazy var releasedDate = UILabel()
+    lazy var metacritic = UILabel()
+    lazy var gameDescription = UITextView()
+    lazy var favoriteButton:UIButton = UIButton()
+    
+    
     lazy var gameID:Int? = nil
     lazy var game:GameDetail? = nil
     var isFavorited:Bool = false
-    @IBOutlet weak var gameImage: UIImageView!
-    var favoriteButton:UIButton = UIButton()
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var relasedDateLabel: UILabel!
-    @IBOutlet weak var metaCriticLabel: UILabel!
-    @IBOutlet weak var descriptionTextArea: UITextView!
-    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.delegate = self
-        descriptionTextArea.delegate = self
-        descriptionTextArea.isScrollEnabled = false
+        
+        createView()
         isFavorited = CoreDataController.run.checkCoreData(gameID!)
-        createButton()
         getData()
         
-        // Do any additional setup after loading the view.
     }
     @IBAction func backButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
@@ -82,38 +81,13 @@ class GameDetailView: UIViewController {
     
     func configure(){
         if let game = game {
-            gameImage.kf.setImage(with: URL(string: game.background_image))
-            nameLabel.text = game.name
-            relasedDateLabel.text = "Released Date: \(game.released)"
-            metaCriticLabel.text = "Metacritic: \(game.metacritic ?? 0)"
-            descriptionTextArea.text = game.gameDescription.replacingOccurrences(of: "<[^>]+>", with: "", options: String.CompareOptions.regularExpression, range: nil)
+            gameImage1.kf.setImage(with: URL(string: game.background_image))
+            nameLabel1.text = game.name
+            releasedDate.text = "Released Date: \(game.released)"
+            metacritic.text = "Metacritic: \(game.metacritic ?? 0)"
+            gameDescription.text = game.gameDescription.replacingOccurrences(of: "<[^>]+>", with: "", options: String.CompareOptions.regularExpression, range: nil)
         }
     }
-    
 
 }
 
-extension GameDetailView: UIScrollViewDelegate, UITextViewDelegate {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == self.scrollView,!scrollView.contentOffset.equalTo(CGPoint.init(x: 0, y: 0)) {
-            self.descriptionTextArea.isScrollEnabled = true
-            self.scrollView.isScrollEnabled = false
-        } else if scrollView == descriptionTextArea, scrollView.contentOffset.equalTo(CGPoint.init(x: 0, y: 0)) {
-            self.descriptionTextArea.isScrollEnabled = false
-            self.scrollView.isScrollEnabled = true
-        }
-    }
-    
-    func createButton() {
-        favoriteButton = UIButton.init(frame: CGRect.init(x: self.gameImage.bounds.maxX - 75, y: self.gameImage.bounds.maxY - 75, width: 50, height: 50))
-        if isFavorited {
-            favoriteButton.setImage(UIImage.init(named: "heart_filled"), for: .normal)
-        } else {
-            favoriteButton.setImage(UIImage.init(named: "heart"), for: .normal)
-        }
-        favoriteButton.addTarget(self, action: #selector(addFavorite), for: .touchUpInside)
-        favoriteButton.isUserInteractionEnabled = true
-        gameImage.isUserInteractionEnabled = true
-        gameImage.addSubview(favoriteButton)
-    }
-}

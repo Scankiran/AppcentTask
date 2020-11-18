@@ -182,7 +182,7 @@ extension MainView {
         AF.request(Constants.shared.requestURL, method: .get, parameters: nil, headers: HTTPHeaders.init(Constants.shared.requestHeaders), interceptor: nil, requestModifier: nil).response { (response) in
             if let data = response.data {
                 do {
-                    if appendData {
+                    if !appendData {
                         self.data = try JSONDecoder.init().decode(Games.self, from: data)
                         self.collectionView.reloadData()
                     } else {
