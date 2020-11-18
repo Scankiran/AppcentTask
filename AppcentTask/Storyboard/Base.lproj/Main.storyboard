@@ -22,23 +22,6 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F3h-zk-s2K">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="861"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3Q-BV-AT7" customClass="iCarousel">
-                                                <rect key="frame" x="8" y="72" width="359" height="198"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="198" id="UQW-ih-OVr"/>
-                                                </constraints>
-                                            </view>
-                                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="qRt-iM-hNh">
-                                                <rect key="frame" x="126" y="278" width="123" height="28"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color key="pageIndicatorTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <color key="currentPageIndicatorTintColor" systemColor="systemPinkColor"/>
-                                            </pageControl>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="AZt-xi-Y55">
-                                                <rect key="frame" x="8" y="322" width="359" height="523"/>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                            </tableView>
                                             <searchBar contentMode="redraw" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ACW-XC-S3K">
                                                 <rect key="frame" x="0.0" y="8" width="375" height="56"/>
                                                 <textInputTraits key="textInputTraits"/>
@@ -47,17 +30,8 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="ACW-XC-S3K" secondAttribute="trailing" id="2Ga-GB-29b"/>
-                                            <constraint firstItem="qRt-iM-hNh" firstAttribute="top" secondItem="T3Q-BV-AT7" secondAttribute="bottom" constant="8" id="AvG-Hw-asb"/>
-                                            <constraint firstAttribute="bottom" secondItem="AZt-xi-Y55" secondAttribute="bottom" constant="16" id="C6n-8c-DBn"/>
-                                            <constraint firstItem="T3Q-BV-AT7" firstAttribute="leading" secondItem="F3h-zk-s2K" secondAttribute="leading" constant="8" id="Gud-30-H0E"/>
-                                            <constraint firstAttribute="trailing" secondItem="T3Q-BV-AT7" secondAttribute="trailing" constant="8" id="Jfe-3L-xwj"/>
                                             <constraint firstItem="ACW-XC-S3K" firstAttribute="top" secondItem="F3h-zk-s2K" secondAttribute="top" constant="8" id="Koe-wv-46e"/>
-                                            <constraint firstItem="AZt-xi-Y55" firstAttribute="top" secondItem="qRt-iM-hNh" secondAttribute="bottom" constant="16" id="MUq-yD-5FK"/>
-                                            <constraint firstItem="qRt-iM-hNh" firstAttribute="centerX" secondItem="F3h-zk-s2K" secondAttribute="centerX" id="NQ0-Ea-kZU"/>
-                                            <constraint firstItem="T3Q-BV-AT7" firstAttribute="top" secondItem="F3h-zk-s2K" secondAttribute="top" constant="72" id="PUf-jt-eAb"/>
-                                            <constraint firstAttribute="trailing" secondItem="AZt-xi-Y55" secondAttribute="trailing" constant="8" id="Pza-ag-4ps"/>
                                             <constraint firstItem="ACW-XC-S3K" firstAttribute="leading" secondItem="F3h-zk-s2K" secondAttribute="leading" id="bfq-He-sdT"/>
-                                            <constraint firstItem="AZt-xi-Y55" firstAttribute="leading" secondItem="F3h-zk-s2K" secondAttribute="leading" constant="8" id="ch9-1d-0cD"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -84,12 +58,9 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" image="house" catalog="system" selectedImage="house.fill" id="ykh-Oc-5pm"/>
                     <connections>
-                        <outlet property="carouselView" destination="T3Q-BV-AT7" id="hW7-lU-1L4"/>
-                        <outlet property="pageControl" destination="qRt-iM-hNh" id="XKi-8m-mHn"/>
-                        <outlet property="pageControllerCons" destination="PUf-jt-eAb" id="NYS-bf-z7F"/>
+                        <outlet property="contentView" destination="F3h-zk-s2K" id="ouz-Fa-LF6"/>
                         <outlet property="scrollView" destination="UsM-Ly-TkY" id="n2A-Ez-47h"/>
                         <outlet property="searchBar" destination="ACW-XC-S3K" id="cGH-td-jCc"/>
-                        <outlet property="tableView" destination="AZt-xi-Y55" id="Dg2-XF-NgG"/>
                         <segue destination="WGr-rL-e4I" kind="show" identifier="toGameDetail" id="gT8-Hc-NCB"/>
                     </connections>
                 </viewController>
@@ -289,9 +260,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

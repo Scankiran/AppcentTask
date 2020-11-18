@@ -9,6 +9,18 @@ import UIKit
 import Alamofire
 import iCarousel
 class MainView: UIViewController {
+    
+ 
+    @IBOutlet weak var searchBar: UISearchBar!
+    var pageControl: UIPageControl = UIPageControl()
+    var tableView: UITableView = UITableView()
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
+    var carouselView: iCarousel = iCarousel()
+    
+    lazy var isSearch:Bool = false
+    lazy var searchResult:[Game] = []
+    lazy var selectedID:Int = 0
     var data:Games? {
         didSet {
             carouselView.delegate = self
@@ -16,21 +28,14 @@ class MainView: UIViewController {
             _ = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(autoScrool), userInfo: nil, repeats: true)
         }
     }
-    lazy var selectedID:Int = 0
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var pageControl: UIPageControl!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var pageControllerCons: NSLayoutConstraint!
-    @IBOutlet weak var carouselView: iCarousel!
     
-    lazy var isSearch:Bool = false
-    lazy var searchResult:[Game] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        
+        createCarousel()
+        createTableView()
         searchBar.delegate = self
         getData()
         giveDelegateToTableView()
@@ -39,26 +44,20 @@ class MainView: UIViewController {
     }
     
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! GameDetailView
         vc.gameID = selectedID
     }
 
-    //MARK:Search Bar Functions
-        @objc func dismissKeyboard() {
-            print("dismiswork")
-          searchBar.resignFirstResponder()
-        }
-
-        lazy var tapRecognizer: UITapGestureRecognizer = {
-          var recognizer = UITapGestureRecognizer(target:self, action: #selector(dismissKeyboard))
-          return recognizer
-        }()
+    var tapRecognizer: UITapGestureRecognizer = {
+      var recognizer = UITapGestureRecognizer(target:self, action: #selector(dismissKeyboard))
+      return recognizer
+    }()
 }
 
-
+//MARK: Carousel View.
 extension MainView: iCarouselDelegate, iCarouselDataSource {
+    
     func numberOfItems(in carousel: iCarousel) -> Int {
         return 3
     }
@@ -119,7 +118,9 @@ extension MainView: UISearchBarDelegate {
         if self.view.subviews.last?.tag == 9 {
             self.view.subviews.last?.removeFromSuperview()
         }
-        pageControllerCons.constant = 72
+        createCarousel()
+        tableView.removeFromSuperview()
+        createTableView()
         self.tableView.reloadData()
     }
   
@@ -147,46 +148,33 @@ extension MainView: UISearchBarDelegate {
                 showNotFound()
                 return
             }
-            pageControllerCons.constant = -180
+            carouselView.removeFromSuperview()
+            pageControl.removeFromSuperview()
+            self.tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16).isActive = true
             self.tableView.reloadData()
             return
+        }
+        
+        if searchText.isEmpty {
+            isSearch = false
+            tableView.removeFromSuperview()
+            createCarousel()
+            createTableView()
+            tableView.reloadData()
         }
         
         
     }
     
-    private func showNotFound() {
-        let view = UIView(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
-        view.translatesAutoresizingMaskIntoConstraints = false
-        
-        let label = UILabel.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Üzgünüz, aradığınız oyun bulunamadı!"
-        
-        view.tag = 9
-        view.backgroundColor = UIColor.white
-        
-        view.addSubview(label)
-        self.view.addSubview(view)
-        
-        view.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 0).isActive = true
-        view.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
-        view.heightAnchor.constraint(equalToConstant: self.view.frame.height - 80).isActive = true
-        
-        label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        label.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        label.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
-        label.textAlignment = .center
-  
-    }
+    
+    
     
     
 }
 
 
 
-
+//MARK: Get Data
 extension MainView {
     func getData()  {
         AF.request(Constants.shared.requestURL, method: .get, parameters: nil, headers: HTTPHeaders.init(Constants.shared.requestHeaders), interceptor: nil, requestModifier: nil).response { (response) in
@@ -205,6 +193,8 @@ extension MainView {
 }
 
 
+
+//MARK: Table View
 extension MainView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (isSearch) ? searchResult.count : ((data?.results.count ?? 0) - 3)
@@ -242,29 +232,8 @@ extension MainView: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-    
-    func giveDelegateToTableView() {
-        tableView.register(UINib.init(nibName: Constants.shared.gameCellProperty, bundle: nil), forCellReuseIdentifier: Constants.shared.gameCellProperty)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.isScrollEnabled = false
-        tableView.rowHeight = 100
-        
-        scrollView.delegate = self
-    }
-    
 }
 
 
-extension MainView: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == self.scrollView,!scrollView.contentOffset.equalTo(CGPoint.init(x: 0, y: 0)) {
-            self.tableView.isScrollEnabled = true
-            self.scrollView.isScrollEnabled = false
-        } else if scrollView == tableView, scrollView.contentOffset.equalTo(CGPoint.init(x: 0, y: 0)) {
-            self.tableView.isScrollEnabled = false
-            self.scrollView.isScrollEnabled = true
-        }
-    }
-}
+
 
