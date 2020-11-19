@@ -7,7 +7,9 @@
 
 import UIKit
 import Alamofire; import Kingfisher
-class GameDetailView: UIViewController {
+class GameDetailViewController: UIViewController {
+    
+    //MARK: Variables
     lazy var backButton1 = UIButton()
     lazy var gameImage1 = UIImageView()
     lazy var nameLabel1 = UILabel()
@@ -21,14 +23,16 @@ class GameDetailView: UIViewController {
     lazy var game:GameDetail? = nil
     var isFavorited:Bool = false
     
+    
+    //MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         isFavorited = CoreDataController.run.checkCoreData(gameID!)
         getData()
         createView()
     }
+    
+    
     @IBAction func backButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -64,21 +68,21 @@ class GameDetailView: UIViewController {
     }
     
     
+    //MARK: Get Data
+    /// Fetch Selected GameDetail from API with Alamofire. And If fectch after first page, append data to situated data
     func getData() {
-        AF.request(Constants.shared.requestURL + "/\(gameID ?? 0)", method: .get, parameters: nil, headers: HTTPHeaders.init(Constants.shared.requestHeaders), interceptor: nil, requestModifier: nil).response { (response) in
-            if let data = response.data {
-                do {
-                    self.game = try JSONDecoder.init().decode(GameDetail.self, from: data)
-                    self.configure()
-                }catch {
-                    print(error)
-                    print(error.localizedDescription)
-                }
-                
+        API.run.getGameDetail(gameID: self.gameID ?? 0) { (gameDetail, err) in
+            if let err = err {
+                print(err.localizedDescription)
+                return
             }
+            self.game = gameDetail!
+            self.configure()
         }
     }
     
+    //MARK: Configure
+    ///Assign informations to view.
     func configure(){
         if let game = game {
             gameImage1.kf.setImage(with: URL(string: game.background_image))

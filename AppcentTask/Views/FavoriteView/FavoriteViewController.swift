@@ -7,21 +7,20 @@
 
 import UIKit
 import CoreData
-class FavoriteView: UIViewController {
+class FavoriteViewController: UIViewController {
+    //MARK: Variables
     var favoritedGames:[NSManagedObject] = [] {
         didSet {
             giveDelegateToView()
         }
     }
+    
     lazy var collectionView = UICollectionView.init(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     lazy var selectedID:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getData()
         createCollectionView()
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -29,11 +28,8 @@ class FavoriteView: UIViewController {
         getData()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination as! GameDetailView
-        vc.gameID = selectedID
-    }
-    
+    //MARK: Ger Data
+    /// Get favorited games from CoreData
     func getData() {
         CoreDataController.run.getGames { (result, err) in
             if let err = err {
@@ -44,10 +40,17 @@ class FavoriteView: UIViewController {
             self.collectionView.reloadData()
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! GameDetailViewController
+        vc.gameID = selectedID
+    }
 
 }
 
-extension FavoriteView: UICollectionViewDelegate, UICollectionViewDataSource {
+
+//MARK: Collection View
+extension FavoriteViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.favoritedGames.count
     }
@@ -74,24 +77,6 @@ extension FavoriteView: UICollectionViewDelegate, UICollectionViewDataSource {
 }
 
 
-extension FavoriteView {
-    func createCollectionView() {
-        
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.isUserInteractionEnabled = true
-        
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: 320, height: 100)
-        collectionView.collectionViewLayout = layout
-        collectionView.backgroundColor = UIColor.clear
-        self.view.addSubview(collectionView)
-        collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 8).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant:  -8).isActive = true
-        collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 32).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 16).isActive = true
-    }
-}
 
 
 

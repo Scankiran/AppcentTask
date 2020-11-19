@@ -21,6 +21,9 @@ class CollectionViewCell: UICollectionViewCell {
         // Initialization code
     }
 
+    
+    /// Assign Game informations to cell components
+    /// - Parameter game: Game Object
     func configure(_ game:Game) {
         id = game.id
         gameImage.kf.setImage(with: URL(string: game.background_image),options: [.targetCache(customCache())])
@@ -28,6 +31,10 @@ class CollectionViewCell: UICollectionViewCell {
         ratingLabel.text = "\(game.rating)/\(game.rating_top)"
     }
     
+    
+    
+    /// Assign Game informations to cell components
+    /// - Parameter game: Game Object
     func configure(_ game:NSManagedObject) {
         let id = game.value(forKey: "id") as! Int
         let name = game.value(forKey: "name") as! String
@@ -41,12 +48,14 @@ class CollectionViewCell: UICollectionViewCell {
         ratingLabel.text = "\(rating)/\(rating_top)"
     }
     
+    
     override func prepareForReuse() {
         gameImage.image = nil
         nameLabel.text = ""
         ratingLabel.text = ""
     }
     
+    //For Cache to disk, not memory
     private func customCache() -> ImageCache {
         let cache = ImageCache.default
         cache.memoryStorage.config.totalCostLimit = 1

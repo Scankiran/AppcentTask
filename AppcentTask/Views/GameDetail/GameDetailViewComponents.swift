@@ -8,9 +8,9 @@
 import Foundation
 import UIKit
 
-extension GameDetailView {
+extension GameDetailViewController {
+    //MARK: Create Main View
     func createView() {
-        
         backButton1.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(backButton1)
         backButton1.setTitle("Back", for: .normal)

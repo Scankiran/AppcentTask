@@ -12,7 +12,11 @@ import UIKit
 class CoreDataController {
     static let run = CoreDataController()
     
-    
+    /**
+     Check CoreData entity for game is favorited or vice versa.
+     - Parameter id:Game ID
+     - Returns: True if game favorited, False if game not favorited.
+     */
     func checkCoreData(_ id:Int) -> Bool {
         guard let appDelegate =
           UIApplication.shared.delegate as? AppDelegate else {
@@ -43,6 +47,11 @@ class CoreDataController {
     
     
     
+    /**
+     Fetch favorited games from CoreData
+     - Parameter handler:Completion Handler
+     - Returns: If there is an error return error. Otherwise return NSManagedObject array which has favorited games informations..
+     */
     func getGames(handler: @escaping (_ result:[NSManagedObject]?,_ error:Error?)-> Void) {
         guard let appDelegate =
           UIApplication.shared.delegate as? AppDelegate else {
@@ -67,6 +76,12 @@ class CoreDataController {
         }
     }
     
+    
+    /**
+     Delete Game where CoreData.
+     - Parameter id:Game ID
+     - Returns: True if game favorited, False if game not favorited.
+     */
     func deleteGame(_ id:Int) -> Bool{
         guard let appDelegate =
           UIApplication.shared.delegate as? AppDelegate else {
@@ -99,6 +114,16 @@ class CoreDataController {
     }
     
     
+    
+    /// Save game to CoreData which favorited
+    /// - Parameters:
+    ///   - id: Game ID
+    ///   - name: Game Name
+    ///   - released: Game Released Date
+    ///   - background_image: Game Image URL
+    ///   - rating: Game Rating
+    ///   - rating_top: Game Rating Max Level
+    ///   - handler: Completion Handler
     func saveGame(_ id:Int,_ name:String,_ released:String,_ background_image:String, _ rating:Double,_ rating_top:Double,handler: @escaping (_ result:Any?,_ error:Error?) -> Void) {
           
         guard let appDelegate =
@@ -139,30 +164,4 @@ class CoreDataController {
           }
     }
     
-    func clearCoreData() {
-        self.getGames { (objects, err) in
-            if let err = err {
-                print(err)
-                return
-            }
-            guard let appDelegate =
-                UIApplication.shared.delegate as? AppDelegate else {
-                return
-            }
-              
-              // 1
-            let managedContext =
-                appDelegate.persistentContainer.viewContext
-              
-            do {
-                for object in objects! {
-                    managedContext.delete(object)
-                }
-                try managedContext.save()
-            } catch let error as NSError {
-              
-              print("Could not save. \(error), \(error.userInfo)")
-            }
-        }
-    }
 }
