@@ -11,6 +11,7 @@ import Kingfisher
 
 class CollectionViewCell: UICollectionViewCell {
     var id = 0
+    let indicator = UIActivityIndicatorView.init(style: .medium)
     @IBOutlet weak var gameImage: UIImageView!
     @IBOutlet weak var view: UIView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -19,6 +20,7 @@ class CollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.isUserInteractionEnabled = true
     }
 
     
@@ -26,7 +28,18 @@ class CollectionViewCell: UICollectionViewCell {
     /// - Parameter game: Game Object
     func configure(_ game:Game) {
         id = game.id
-        gameImage.kf.setImage(with: URL(string: game.background_image),options: [.targetCache(customCache())])
+        indicator.hidesWhenStopped = true
+        indicator.frame = CGRect.init(origin: gameImage.bounds.origin, size: CGSize.init(width: 46, height: 46))
+        
+        self.gameImage.addSubview(indicator)
+        indicator.startAnimating()
+        gameImage.kf.setImage(with: URL(string: game.background_image),options: [.targetCache(customCache())]) { (image, err, cacheType, url) in
+            if let err = err {
+                print(err.localizedDescription)
+                return
+            }
+            self.indicator.stopAnimating()
+        }
         nameLabel.text = game.name
         ratingLabel.text = "\(game.rating)/\(game.rating_top)"
     }
@@ -61,4 +74,5 @@ class CollectionViewCell: UICollectionViewCell {
         cache.memoryStorage.config.totalCostLimit = 1
         return cache
     }
+    
 }

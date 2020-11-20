@@ -44,6 +44,7 @@ extension MainViewController {
     //MARK: Carousel and Page Controller
     /// Create Carousel and Page Controller and add main view.
     func createCarousel() {
+        
         carouselView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(carouselView)
         

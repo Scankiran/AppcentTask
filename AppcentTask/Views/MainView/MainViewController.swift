@@ -50,10 +50,6 @@ class MainViewController: UIViewController {
         vc.gameID = selectedID
     }
 
-    var tapRecognizer: UITapGestureRecognizer = {
-      var recognizer = UITapGestureRecognizer(target:self, action: #selector(dismissKeyboard))
-      return recognizer
-    }()
 }
 
 
@@ -122,7 +118,7 @@ extension MainViewController: iCarouselDelegate, iCarouselDataSource {
     
     /// Auto scrool between top Games on Carousel view.
     @objc private func autoScrool() {
-        if carouselView.currentItemIndex != carouselView.numberOfItems {
+        if carouselView.currentItemIndex + 1 != carouselView.numberOfItems {
             carouselView.scrollToItem(at: carouselView.currentItemIndex + 1, duration: 1)
         } else {
             carouselView.scrollToItem(at: 0, duration: 1)
@@ -154,20 +150,18 @@ extension MainViewController: UISearchBarDelegate {
         }
         
         createCarousel()
-        collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 16).isActive = false
-        collectionView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 8).isActive = true
+        collectionView.removeFromSuperview()
+        createCollectionView(topAnchorTarget: self.pageControl)
         self.collectionView.reloadData()
     }
     
   
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         isSearch = true
-        view.addGestureRecognizer(tapRecognizer)
     }
   
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         isSearch = false
-        view.removeGestureRecognizer(tapRecognizer)
     }
     
     //MARK: Search Text Change
@@ -178,7 +172,7 @@ extension MainViewController: UISearchBarDelegate {
             isSearch = true
             
             for game in data!.results {
-                if game.name.contains(searchText) {
+                if game.name.lowercased().contains(searchText.lowercased()) {
                     searchResult.append(game)
                 }
             }
